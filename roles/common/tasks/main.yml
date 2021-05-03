@@ -1,0 +1,40 @@
+# roles/common/tasks
+
+# common tasks for all linodes
+- name: apt update
+  apt:
+    name: "*"
+    state: latest
+
+- name: apt upgrade
+  apt:
+    upgrade: full
+
+- name: install basic packages
+  apt:
+    pkg:
+    - ntp
+    - wget 
+    - curl
+    - htop
+    - rsync
+    - fail2ban
+    state: latest
+
+- name: fail2ban jail.local
+  copy:
+    src: /etc/fail2ban/jail.conf
+    dest: /etc/fail2ban/jail.local
+    remote_src: yes
+  notify: start fail2ban
+
+- name: secure ssh configs
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '^\#?PermitRootLogin (yes|no)', line: 'PermitRootLogin without-password' }
+    - { regexp: '^\#?PasswordAuthentication (yes|no)', line: 'PasswordAuthentication no' }
+    - { regexp: '^\#?PubkeyAuthentication (yes|no)', line: 'PubkeyAuthentication yes' }
+  notify: restart ssh

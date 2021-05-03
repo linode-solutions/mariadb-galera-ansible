@@ -1,0 +1,8 @@
+ssh_keys: 
+galera_prefix: 
+cluster_name: 
+type:
+region: 
+image:
+group: 
+tags:

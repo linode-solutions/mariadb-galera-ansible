@@ -1,0 +1,7 @@
+# roles/db/tasks/debian.yml
+
+- name: install python-mysqldb
+  apt:
+    name: python-mysqldb
+    state: latest
+    install_recommends: yes

@@ -1,0 +1,38 @@
+# roles/ssl/tasks
+
+# generate ssl/tls certificates for galera cluster
+- name: generate ca key
+  community.crypto.openssl_privatekey:
+    path: roles/ssl/files/server_CA.pem
+
+- name: generate ca csr
+  community.crypto.openssl_csr:
+    path: roles/ssl/files/server_CA.csr
+    privatekey_path: roles/ssl/files/server_CA.pem
+    common_name: '{{ cluster_name }} CA'
+
+- name: generate ca crt
+  community.crypto.x509_certificate:
+    path: roles/ssl/files/server_CA.crt
+    privatekey_path: roles/ssl/files/server_CA.pem
+    csr_path: roles/ssl/files/server_CA.csr
+    provider: selfsigned
+
+- name: generate server key
+  community.crypto.openssl_privatekey:
+    path: roles/ssl/files/server.pem
+
+- name: generate server csr
+  community.crypto.openssl_csr:
+    path: roles/ssl/files/server.csr
+    privatekey_path: roles/ssl/files/server.pem
+    common_name: '{{ cluster_name }}'
+
+- name: generate server cert signed with ca cert
+  community.crypto.x509_certificate:
+    path: roles/ssl/files/server.crt
+    privatekey_path: roles/ssl/files/server.pem
+    csr_path: roles/ssl/files/server.csr
+    ownca_path: roles/ssl/files/server_CA.crt
+    ownca_privatekey_path: roles/ssl/files/server_CA.pem
+    provider: ownca

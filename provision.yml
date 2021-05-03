@@ -1,0 +1,102 @@
+# create galera linodes
+- name: create galera linodes
+  hosts: localhost
+  vars_files:
+      - group_vars/galera/vars
+      - group_vars/galera/secret_vars
+  
+  vars:
+    count: 3
+
+  tasks:
+  - name: creating galera linodes
+    linode.cloud.instance:
+      label: '{{ galera_prefix }}{{ item }}'
+      api_token: '{{ token }}'
+      type: '{{ type }}'
+      region: '{{ region }}'
+      image: '{{ image }}'
+      root_pass: '{{ root_pass }}'
+      authorized_keys: '{{ ssh_keys }}'
+      private_ip: true
+      group: '{{ group }}'
+      tags: '{{ tags }}'
+      state: present
+    register: linode
+    with_sequence: count='{{count}}'
+
+  - name: Get info about an instance by label
+    linode.cloud.instance_info:
+      api_token: '{{ token }}'
+      label: '{{ galera_prefix }}{{ item }}'
+    register: info
+    with_sequence: count='{{count}}'
+  # new
+  - name: set facts
+    set_fact:
+      # hostnames
+      galera1: '{{ info.results.0.instance.label }}'
+      galera2: '{{ info.results.1.instance.label }}'
+      galera3: '{{ info.results.2.instance.label }}'
+      # public ips
+      galera_ip1: '{{ info.results.0.instance.ipv4[0] }}'
+      galera_ip2: '{{ info.results.1.instance.ipv4[0] }}'
+      galera_ip3: '{{ info.results.2.instance.ipv4[0] }}'
+      # private ips
+      galera_priv1: '{{ info.results.0.instance.ipv4[1] }}'
+      galera_priv2: '{{ info.results.1.instance.ipv4[1] }}'
+      galera_priv3: '{{ info.results.2.instance.ipv4[1] }}'
+  
+  - name: test connectivity
+    ping: '{{ item }}'
+    with_items:
+      - '{{ galera_ip1 }}'
+      - '{{ galera_ip2 }}'
+      - '{{ galera_ip3 }}'
+
+  - name: update group_vars
+    blockinfile:
+      path: ./group_vars/galera/vars
+      marker: "# {mark} INSTANCE VARS"
+      block: |
+        # hostnames 
+        host1: {{ galera1 }}
+        host2: {{ galera2 }}
+        host3: {{ galera3 }}
+        # private ips
+        priv_ip1: {{ galera_priv1 }}
+        priv_ip2: {{ galera_priv2 }}
+        priv_ip3: {{ galera_priv3 }}
+
+  - name: update inventory
+    blockinfile:
+      path: ./hosts
+      marker: "# {mark} GALERA LINODES"
+      block: |
+        [galera-servers]
+        {{ galera_ip1 }}
+        {{ galera_ip2 }}
+        {{ galera_ip3 }}
+  
+  - name: update in-memory inventory
+    add_host:
+      name: '{{ item }}'
+      groups: galera-servers
+    with_items:
+      - '{{ galera_ip1 }}'
+      - '{{ galera_ip2 }}'
+      - '{{ galera_ip3 }}'
+
+  - name: wait for port 22 to become open
+    wait_for:
+      port: 22
+      host: '{{ item }}'
+      search_regex: OpenSSH
+      delay: 10
+    connection: local
+    with_items:
+      - '{{ galera_ip1 }}'
+      - '{{ galera_ip2 }}'
+      - '{{ galera_ip3 }}'
+
+  

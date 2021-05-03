@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<zone>
+  <short>Internal</short>
+  <description>Internal zone that controls applications that can connect to the database </description>
+  <service name="mysql"/>
+  <service name="galera"/>
+
+  <!-- {{ host1 }} -->
+  <source address="{{ priv_ip1 }}/32"/>
+
+  <!-- {{ host2 }} -->
+  <source address="{{ priv_ip2 }}/32"/>
+
+  <!-- {{ host3 }} -->
+  <source address="{{ priv_ip3 }}/32"/>
+
+</zone>
