@@ -13,7 +13,7 @@ Deploy a High Availability Galera database cluster using the [Linode Ansible Col
 ## Installation
 Create a virtual environment to isolate dependencies from other packages on your system.
 ```
-pip3 -m venv env
+python3 -m venv env
 source env/bin/activate
 ```
 
