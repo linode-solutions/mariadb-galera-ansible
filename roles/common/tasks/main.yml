@@ -1,10 +1,14 @@
 # roles/common/tasks
 
 # common tasks for all linodes
+- name: force ipv4 with apt
+  copy:
+    content: 'Acquire::ForceIPv4 "true";'
+    dest: /etc/apt/apt.conf.d/99force-ipv4
+
 - name: apt update
   apt:
-    name: "*"
-    state: latest
+    update_cache: yes
 
 - name: apt upgrade
   apt:
