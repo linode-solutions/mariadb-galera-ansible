@@ -20,7 +20,7 @@
       authorized_keys: '{{ ssh_keys }}'
       private_ip: true
       group: '{{ group }}'
-      tags: '{{ tags }}'
+      tags: '{{ linode_tags }}'
       state: present
     register: linode
     with_sequence: count='{{count}}'
@@ -73,7 +73,7 @@
       path: ./hosts
       marker: "# {mark} GALERA LINODES"
       block: |
-        [galera-servers]
+        [galera_servers]
         {{ galera_ip1 }}
         {{ galera_ip2 }}
         {{ galera_ip3 }}
@@ -81,7 +81,7 @@
   - name: update in-memory inventory
     add_host:
       name: '{{ item }}'
-      groups: galera-servers
+      groups: galera_servers
     with_items:
       - '{{ galera_ip1 }}'
       - '{{ galera_ip2 }}'

@@ -2,7 +2,7 @@
 
 # cluster pre-check
 - name: pre-check
-  hosts: galera-servers
+  hosts: galera_servers
   user: root
   vars_files:
     - group_vars/galera/vars
@@ -22,7 +22,7 @@
 
 # linodes
 - name: configure galera linodes
-  hosts: galera-servers
+  hosts: galera_servers
   user: root
   vars_files:
     - group_vars/galera/vars
