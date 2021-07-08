@@ -5,4 +5,4 @@ type:
 region: 
 image:
 group: 
-tags:
+linode_tags:

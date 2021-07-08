@@ -95,7 +95,7 @@
 - name: set galera1 hostname
   shell: hostnamectl set-hostname '{{ host1 }}'
   run_once: true
-  delegate_to: "{{groups['galera-servers'][0]}}"
+  delegate_to: "{{groups['galera_servers'][0]}}"
 
 - name: set facts for galera1
   set_fact:
@@ -103,20 +103,20 @@
     wsrep_node_address: '{{ priv_ip1 }}'
     wsrep_node_name: '{{ host1 }}'
   run_once: true
-  delegate_to: "{{groups['galera-servers'][0]}}"
+  delegate_to: "{{groups['galera_servers'][0]}}"
 
 - name: configure galera1 galera.cnf
   template:
     src: galera.cnf.j2
     dest: /etc/mysql/conf.d/galera.cnf
   run_once: true
-  delegate_to: "{{groups['galera-servers'][0]}}"
+  delegate_to: "{{groups['galera_servers'][0]}}"
 
 # set up galera2
 - name: set galera2 hostname
   shell: hostnamectl set-hostname '{{ host2 }}'
   run_once: true
-  delegate_to: "{{groups['galera-servers'][1]}}"
+  delegate_to: "{{groups['galera_servers'][1]}}"
 
 - name: set facts for galera2
   set_fact:
@@ -124,20 +124,20 @@
     wsrep_node_address: '{{ priv_ip2 }}'
     wsrep_node_name: '{{ host2 }}'
   run_once: true
-  delegate_to: "{{groups['galera-servers'][1]}}"
+  delegate_to: "{{groups['galera_servers'][1]}}"
 
 - name: configure galera2 galera.cnf
   template:
     src: galera.cnf.j2
     dest: /etc/mysql/conf.d/galera.cnf
   run_once: true
-  delegate_to: "{{groups['galera-servers'][1]}}"
+  delegate_to: "{{groups['galera_servers'][1]}}"
 
 # set up galera3
 - name: set galera3 hostname
   shell: hostnamectl set-hostname '{{ host3 }}'
   run_once: true
-  delegate_to: "{{groups['galera-servers'][2]}}"
+  delegate_to: "{{groups['galera_servers'][2]}}"
 
 - name: set facts for galera3
   set_fact:
@@ -145,14 +145,14 @@
     wsrep_node_address: '{{ priv_ip3 }}'
     wsrep_node_name: '{{ host3 }}'
   run_once: true
-  delegate_to: "{{groups['galera-servers'][2]}}"
+  delegate_to: "{{groups['galera_servers'][2]}}"
 
 - name: configure galera3 galera.cnf
   template:
     src: galera.cnf.j2
     dest: /etc/mysql/conf.d/galera.cnf
   run_once: true
-  delegate_to: "{{groups['galera-servers'][2]}}"
+  delegate_to: "{{groups['galera_servers'][2]}}"
 
 # bootstrap the cluster
 - name: stop mysql
@@ -163,21 +163,21 @@
 - name: bootstrap galera1
   shell: galera_new_cluster
   run_once: true
-  delegate_to: "{{groups['galera-servers'][0]}}"
+  delegate_to: "{{groups['galera_servers'][0]}}"
 
 - name: start galera2 mysql
   service:
     name: mysql
     state: started
   run_once: true
-  delegate_to: "{{groups['galera-servers'][1]}}"
+  delegate_to: "{{groups['galera_servers'][1]}}"
 
 - name: start galera3 mysql
   service:
     name: mysql
     state: started
   run_once: true
-  delegate_to: "{{ groups['galera-servers'][2] }}"
+  delegate_to: "{{ groups['galera_servers'][2] }}"
 
 # set up firewall
 - name: install firewalld
