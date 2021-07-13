@@ -50,8 +50,9 @@ token: !vault |
           6365653234666565353634653030316638326662316165386637
 ```
 
-Configure the Linode instance [parameters](https://github.com/linode/ansible_linode/blob/master/docs/instance.rst#id3), `galera_prefix`, and `cluster_name` variables in `group_vars/galera/vars`. As with the above, replace the example values with your own. This playbook was written to support `linode/debian10` and `linode/ubuntu20.04` images.
+Configure the Linode instance [parameters](https://github.com/linode/ansible_linode/blob/master/docs/instance.rst#id3), `galera_prefix`, `cluster_name`, and SSL/TLS variables in `group_vars/galera/vars`. As with the above, replace the example values with your own. This playbook was written to support `linode/debian10` and `linode/ubuntu20.04` images.
 ```
+# linode vars
 ssh_keys: ssh-rsa AAAA_valid_public_ssh_key_123456785== user@their-computer
 galera_prefix: galera
 cluster_name: POC
@@ -59,7 +60,16 @@ type: g6-standard-4
 region: ap-south
 image: linode/debian10
 group: galera-servers
-tags: POC
+linode_tags: POC
+
+# ssl/tls vars
+country_name: US
+state_or_province_name: Pennsylvania
+locality_name: Philadelphia
+organization_name: Linode
+email_address: user@linode.com
+ca_common_name: Galera CA
+common_name: Galera Server
 ```
 
 ## Usage
