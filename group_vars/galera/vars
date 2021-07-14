@@ -1,3 +1,4 @@
+# linode vars
 ssh_keys: 
 galera_prefix: 
 cluster_name: 
@@ -6,3 +7,12 @@ region:
 image:
 group: 
 linode_tags:
+
+# ssl/tls vars
+country_name:
+state_or_province_name:
+locality_name:
+organization_name:
+email_address:
+ca_common_name:
+common_name:

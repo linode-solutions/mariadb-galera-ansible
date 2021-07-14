@@ -31,7 +31,7 @@
       label: '{{ galera_prefix }}{{ item }}'
     register: info
     with_sequence: count='{{count}}'
-  # new
+
   - name: set facts
     set_fact:
       # hostnames

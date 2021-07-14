@@ -11,4 +11,4 @@
     msg: Galera cluster may already be present. Only use this for new deployments.
   when: grastate.stat.exists
   run_once: true
-  delegate_to: "{{ groups['galera-servers'][0] }}"
+  delegate_to: "{{ groups['galera_servers'][0] }}"

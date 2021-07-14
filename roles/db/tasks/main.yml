@@ -61,35 +61,8 @@
       - flush privileges;
     single_transaction: yes
 
-- name: create directory for ssl files
-  file:
-    path: /etc/ssl/mysql
-    state: directory
-    owner: mysql
-    group: mysql
-    mode: '0755'
-
-- name: push ssl files to nodes
-  synchronize:
-    src: roles/ssl/files/
-    dest: /etc/ssl/mysql/
-    mode: push
-    checksum: yes
-
-- name: set permissions for ssl certs
-  file:
-    path: '/etc/ssl/mysql/{{ item }}'
-    state: file
-    owner: mysql
-    group: mysql
-    mode: '0500'
-  with_items:
-    - server_CA.pem
-    - server_CA.csr
-    - server_CA.crt
-    - server.pem
-    - server.csr
-    - server.crt
+- name: configure ssl/tls
+  import_tasks: ssl.yml
 
 # set up galera1
 - name: set galera1 hostname
