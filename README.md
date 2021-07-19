@@ -1,4 +1,6 @@
-# MariaDB Galera Cluster with Ansible 
+# MariaDB Galera Cluster with Ansible
+
+![mariadb-galera-diagram](mariadb-galera-diagram.png)
 
 Deploy a High Availability Galera database cluster using the [Linode Ansible Collection](https://github.com/linode/ansible_linode) and [MariaDB](https://mariadb.com/kb/en/galera-cluster/). Intended to stand up a fresh deployment, including the provisioning of Linode instances. This should _not_ be used for updating an existing deployment. 
 
