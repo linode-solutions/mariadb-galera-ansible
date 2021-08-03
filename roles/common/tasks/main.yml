@@ -23,6 +23,8 @@
     - htop
     - rsync
     - fail2ban
+    - python3-pip
+    - python3-mysqldb
     state: latest
 
 - name: fail2ban jail.local

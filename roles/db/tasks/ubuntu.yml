@@ -1,7 +1,0 @@
-# roles/db/tasks/ubuntu.yml
-
-- name: install python3-mysqldb
-  apt:
-    name: python3-mysqldb
-    state: latest
-    install_recommends: yes
