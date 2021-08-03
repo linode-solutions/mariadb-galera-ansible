@@ -19,18 +19,6 @@
     state: latest
     install_recommends: yes
 
-- name: install python-mysql dependency for debian 10
-  import_tasks: debian.yml
-  when:
-  - ansible_distribution == 'Debian'
-  - ansible_distribution_version == '10'
-
-- name: install python-mysql dependency for ubuntu 20.04
-  import_tasks: ubuntu.yml
-  when:
-  - ansible_distribution == 'Ubuntu'
-  - ansible_distribution_version == '20.04'
-
 - name: create mariadb.service.d directory
   file:
     path: /etc/systemd/system/mariadb.service.d

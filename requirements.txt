@@ -1,3 +1,4 @@
 linode_api4
 ansible
 polling
+pymysql
