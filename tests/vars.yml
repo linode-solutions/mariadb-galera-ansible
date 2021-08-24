@@ -1,0 +1,28 @@
+# linode vars
+ssh_keys: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG925acs9OB9+u1XKZmJRcZ4KIQjzIQAUZ2lGSAoSn6X bthompson@linode.com 
+galera_prefix: galera
+cluster_name: POC
+type: g6-standard-2
+region: ap-south
+image: linode/ubuntu20.04
+group: test
+linode_tags: POC
+
+# ssl/tls vars
+country_name: US
+state_or_province_name: Pennsylvania
+locality_name: Philadelphia
+organization_name: Linode
+email_address: bthompson@linode.com
+ca_common_name: Galera CA
+common_name: Galera Server
+# BEGIN INSTANCE VARS
+# hostnames 
+host1: galera1
+host2: galera2
+host3: galera3
+# private ips
+priv_ip1: 192.168.0.1
+priv_ip2: 192.168.0.2
+priv_ip3: 192.168.0.3
+# END INSTANCE VARS

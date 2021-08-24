@@ -1,0 +1,43 @@
+---
+name: Molecule
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: macos-10.15
+    strategy:
+      max-parallel: 2
+      matrix:
+        python-version: [3.8, 3.9]
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: molecule_test
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Test ansible vars
+        run: |
+          test_vars=$(cat molecule_test/group_vars/galera/vars)
+          galera_ansible_vars=$(curl -s https://gist.githubusercontent.com/linodeproservices/85d4b26ea990b69360c0f03c3e39c851/raw/2f768d2de0042b09f5a9502dedc6f321abb287b9/galera_ansible_vars)
+          diff -w <(echo "$test_vars") <(echo "$galera_ansible_vars")
+      - name: Install dependencies
+        run: |
+          cd molecule_test
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r requirements.txt
+      - name: 'Test Ubuntu 20.04'
+        run: |
+          cd molecule_test/tests
+          molecule test -s ubuntu20.04
+      - name: 'Test Debian 10'
+        run: |
+          cd molecule_test/tests
+          molecule test -s debian10

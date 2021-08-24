@@ -1,0 +1,11 @@
+---
+- name: Prepare
+  hosts: all
+  gather_facts: false
+  become: yes
+  tasks:
+    - name: "install ssh"
+      apt:
+        name: openssh-server
+        state: present
+        update_cache: yes

@@ -1,0 +1,93 @@
+---
+dependency:
+  name: galaxy
+  requirements-file: ../../collections.yml
+driver:
+  name: vagrant
+  provider:
+    name: virtualbox
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+  flake8
+platforms:
+  - name: galera1
+    box: ubuntu/focal64
+    memory: 512
+    cpus: 1
+    interfaces:
+      - network_name: "private_network"
+        type: static
+        ip: 192.168.0.1
+        auto_config: true
+    instance_raw_config_args:
+      - 'vm.network "private_network", type: "static", ip: "192.168.0.1"'
+      - "vm.boot_timeout = 600"
+    provider_raw_config_args:
+      - "customize [ 'modifyvm', :id, '--cableconnected1', 'on']"
+    config_options:
+      ssh.keep_alive: yes
+      ssh.remote_user: "'vagrant'"
+    groups:
+      - galera_servers
+  - name: galera2
+    box: ubuntu/focal64
+    memory: 512
+    cpus: 1
+    interfaces:
+      - network_name: "private_network"
+        type: static
+        ip: 192.168.0.2
+        auto_config: true
+    instance_raw_config_args:
+      - 'vm.network "private_network", type: "static", ip: "192.168.0.2"'
+      - "vm.boot_timeout = 600"
+    provider_raw_config_args:
+      - "customize [ 'modifyvm', :id, '--cableconnected1', 'on']"
+    config_options:
+      ssh.keep_alive: yes
+      ssh.remote_user: "'vagrant'"
+    groups:
+      - galera_servers
+  - name: galera3
+    box: ubuntu/focal64
+    memory: 512
+    cpus: 1
+    interfaces:
+      - network_name: "private_network"
+        type: static
+        ip: 192.168.0.3
+        auto_config: true
+    instance_raw_config_args:
+      - 'vm.network "private_network", type: "static", ip: "192.168.0.3"'
+      - "vm.boot_timeout = 600"
+    provider_raw_config_args:
+      - "customize [ 'modifyvm', :id, '--cableconnected1', 'on']"
+    config_options:
+      ssh.keep_alive: yes
+      ssh.remote_user: "'vagrant'"
+    groups:
+      - galera_servers
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+  env:
+    ANSIBLE_ROLES_PATH: ../../../roles
+verifier:
+  name: ansible
+scenario:
+  test_sequence:
+    - dependency
+    - lint
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - side_effect
+    - verify
+    - cleanup
+    - destroy

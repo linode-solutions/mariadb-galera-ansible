@@ -85,6 +85,48 @@ Now run the `site.yml` playbook with the `hosts` inventory file. A pre-check tak
 ansible-playbook -i hosts site.yml
 ```
 
+## Testing Replication
+From any of the Galera nodes, verify that all three have joined the cluster.
+```
+show status like 'wsrep_cluster_size';
+...
++--------------------+-------+
+| Variable_name      | Value |
++--------------------+-------+
+| wsrep_cluster_size | 3     |
++--------------------+-------+
+```
+
+On the **first** node, create a test database and insert some values into a new table.
+```
+create database testdb;
+create table testdb.test_table (id INT NOT NULL AUTO_INCREMENT, test_num INT, color VARCHAR(10), PRIMARY KEY(id));
+insert into testdb.test_table (test_num, color) VALUES (1, 'green');
+```
+
+Insert another row with different values from the **second** node.
+```
+insert into testdb.test_table (test_num, color) VALUES (2, 'black');
+```
+
+Insert a final row from the **third** node.
+```
+insert into testdb.test_table (test_num, color) VALUES (3, 'red');
+```
+
+You should see the same output of the `test_table` from any of the three nodes, confirming that the databases are synchronized.
+```
+select * from testdb.test_table;
+...
++----+----------+-------+
+| id | test_num | color |
++----+----------+-------+
+|  1 |        1 | green |
+|  2 |        2 | black |
+|  3 |        3 | red   |
++----+----------+-------+
+```
+
 ## Author
 
 - Billy Thompson (@rylabs-billy)
