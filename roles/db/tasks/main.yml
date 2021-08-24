@@ -29,6 +29,7 @@
   template:
     src: timeoutstartsec.conf.j2
     dest: /etc/systemd/system/mariadb.service.d/timeoutstartsec.conf
+    mode: '0644'
 
 - name: systemd daemon reload
   systemd:

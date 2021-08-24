@@ -1,16 +1,19 @@
-# MariaDB Galera Cluster with Ansible
-
 ![mariadb-galera-diagram](mariadb-galera-diagram.png)
+# MariaDB Galera Cluster with Ansible
+[![Molecule](https://github.com/linodeproservices/mariadb-galera-ansible/actions/workflows/actions.yml/badge.svg?branch=main)](https://github.com/linodeproservices/mariadb-galera-ansible/actions/workflows/actions.yml)
 
 Deploy a High Availability Galera database cluster using the [Linode Ansible Collection](https://github.com/linode/ansible_linode) and [MariaDB](https://mariadb.com/kb/en/galera-cluster/). Intended to stand up a fresh deployment, including the provisioning of Linode instances. This should _not_ be used for updating an existing deployment. 
 
 **Distributions:**
-
 - Ubuntu 20.04
 - Debian 10 
 
 **MariaDB:**
- - 10.3
+- 10.3
+
+**Python**
+- 3.8
+- 3.9
 
 ## Installation
 Create a virtual environment to isolate dependencies from other packages on your system.
