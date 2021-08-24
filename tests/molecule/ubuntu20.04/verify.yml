@@ -1,0 +1,78 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  become: true
+  vars_files:
+    - ../../vars.yml
+  tasks:
+    - name: query for wsrep_cluster_size
+      mysql_query:
+        login_user: root
+        login_unix_socket: /run/mysqld/mysqld.sock
+        query: show status like 'wsrep_cluster_size';
+        single_transaction: yes
+      register: info
+
+    - name: verify wsrep_cluster_size
+      assert:
+        that: "{{ info.query_result[0][0]['Value'] }} == 3"
+
+    - name: create test db from galera1
+      mysql_query:
+        login_user: root
+        login_unix_socket: /run/mysqld/mysqld.sock
+        query:
+          - create database testdb;
+          - create table testdb.test_table (id INT NOT NULL AUTO_INCREMENT, test_num INT, color VARCHAR(10), PRIMARY KEY(id));
+          - insert into testdb.test_table (test_num, color) VALUES (1, 'green');
+        single_transaction: yes
+      run_once: true
+      delegate_to: "{{ groups['galera_servers'][0] }}"
+
+    - name: insert values from galera2
+      mysql_query:
+        login_user: root
+        login_unix_socket: /run/mysqld/mysqld.sock
+        query: insert into testdb.test_table (test_num, color) VALUES (2, 'black');
+        single_transaction: yes
+      run_once: true
+      delegate_to: "{{ groups['galera_servers'][1] }}"
+
+    - name: insert values from galera3
+      mysql_query:
+        login_user: root
+        login_unix_socket: /run/mysqld/mysqld.sock
+        query: insert into testdb.test_table (test_num, color) VALUES (3, 'red');
+        single_transaction: yes
+      run_once: true
+      delegate_to: "{{ groups['galera_servers'][2] }}"
+
+    - name: query data from testdb
+      mysql_query:
+        login_user: root
+        login_unix_socket: /run/mysqld/mysqld.sock
+        query: select * from testdb.test_table;
+        single_transaction: yes
+      register: replication_info
+
+    - name: verify replication
+      assert:
+        that:
+          - "{{ replication_info.query_result[0][0]['test_num'] }} == 1"
+          - "{{ replication_info.query_result[0][1]['test_num'] }} == 2"
+          - "{{ replication_info.query_result[0][2]['test_num'] }} == 3"
+          - "{{ replication_info.query_result[0][0]['color'] == 'green' }}"
+          - "{{ replication_info.query_result[0][1]['color'] == 'black' }}"
+          - "{{ replication_info.query_result[0][2]['color'] == 'red' }}"
+
+    - name: test precheck
+      block:
+        - name: verify precheck
+          include_role:
+            name: precheck
+
+      rescue:
+        - name: handle failre
+          debug:
+            msg: 'Precheck saftey was successful'

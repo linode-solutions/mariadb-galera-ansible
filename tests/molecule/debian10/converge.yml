@@ -1,0 +1,16 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  vars_files:
+    - ../../vars.yml
+  tasks:
+    - name: include precheck
+      include_role:
+        name: precheck
+    - name: inlcude common
+      include_role:
+        name: common
+    - name: include db
+      include_role:
+        name: db

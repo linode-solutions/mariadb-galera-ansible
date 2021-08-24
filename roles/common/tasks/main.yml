@@ -5,6 +5,7 @@
   copy:
     content: 'Acquire::ForceIPv4 "true";'
     dest: /etc/apt/apt.conf.d/99force-ipv4
+    mode: '0600'
 
 - name: apt update
   apt:
@@ -25,13 +26,14 @@
     - fail2ban
     - python3-pip
     - python3-mysqldb
-    state: latest
+    state: present
 
 - name: fail2ban jail.local
   copy:
     src: /etc/fail2ban/jail.conf
     dest: /etc/fail2ban/jail.local
     remote_src: yes
+    mode: '0600'
   notify: start fail2ban
 
 - name: secure ssh configs
