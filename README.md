@@ -11,7 +11,7 @@ Deploy a High Availability Galera database cluster using the [Linode Ansible Col
 **MariaDB:**
 - 10.3
 
-**Python**
+**Python:**
 - 3.8
 - 3.9
 
