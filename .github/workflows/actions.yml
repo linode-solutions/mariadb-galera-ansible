@@ -6,7 +6,7 @@ on:
       - main
 jobs:
   build:
-    runs-on: macos-10.15
+    runs-on: ubuntu-20.04
     strategy:
       max-parallel: 2
       matrix:
@@ -29,12 +29,13 @@ jobs:
         run: |
           cd molecule_test
           python3 -m pip install --upgrade pip
+          pip install wheel==0.37.0
           python3 -m pip install -r requirements.txt
-      - name: 'Test Ubuntu 20.04'
-        run: |
-          cd molecule_test/tests
-          molecule test -s ubuntu20.04
       - name: 'Test Debian 10'
         run: |
           cd molecule_test/tests
           molecule test -s debian10
+      - name: 'Test Ubuntu 20.04'
+        run: |
+          cd molecule_test/tests
+          molecule test -s ubuntu20.04
