@@ -9,6 +9,7 @@
       {{ priv_ip1 }} {{ host1 }}
       {{ priv_ip2 }} {{ host2 }}
       {{ priv_ip3 }} {{ host3 }}
+  tags: molecule-notest
 
 - name: install mariadb and dependencies
   apt:
@@ -169,11 +170,10 @@
     src: firewalld-services-galera.j2
     dest: /etc/firewalld/services/galera.xml
     mode: '0640'
-  notify: firewalld enable
 
 - name: configure firewalld internal zone
   template:
     src: firewalld-zones-internal.j2
     dest: /etc/firewalld/zones/internal.xml
     mode: '0640'
-  notify: firewalld reload
+  notify: firewalld enable

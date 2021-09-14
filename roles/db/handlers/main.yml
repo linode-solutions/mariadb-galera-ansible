@@ -1,10 +1,6 @@
 # roles/db/handlers
 - name: firewalld enable
-  service:
+  systemd:
     name: firewalld
-    state: started
+    state: restarted
     enabled: yes
-
-- name: firewalld reload
-  shell: firewall-cmd --reload
-  

@@ -24,6 +24,7 @@
     - htop
     - rsync
     - fail2ban
+    - openssh-server
     - python3-pip
     - python3-mysqldb
     state: present
