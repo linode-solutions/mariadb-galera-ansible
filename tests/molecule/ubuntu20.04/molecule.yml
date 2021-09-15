@@ -13,7 +13,7 @@ platforms:
   - name: galera1
     image: ubuntu20.04
     dockerfile: ./Dockerfile
-    build_image: false
+    build_image: true
     docker_networks:
       - name: galera_network
         ipam_config:
@@ -34,7 +34,7 @@ platforms:
   - name: galera2
     image: ubuntu20.04
     dockerfile: ./Dockerfile
-    build_image: false
+    build_image: true
     docker_networks:
       - name: galera_network
         ipam_config:
@@ -55,7 +55,7 @@ platforms:
   - name: galera3
     image: ubuntu20.04
     dockerfile: ./Dockerfile
-    build_image: false
+    build_image: true
     docker_networks:
       - name: galera_network
         ipam_config:
