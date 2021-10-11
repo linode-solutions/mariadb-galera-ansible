@@ -1,0 +1,52 @@
+# roles/db/tasks/mariadb.yml
+
+- name: update /etc/hosts
+  blockinfile:
+    path: /etc/hosts
+    marker: "# {mark} GALERA HOSTS"
+    block: |
+      {{ priv_ip1 }} {{ host1 }}
+      {{ priv_ip2 }} {{ host2 }}
+      {{ priv_ip3 }} {{ host3 }}
+  tags: molecule-notest
+
+- name: install mariadb and dependencies
+  apt:
+    pkg:
+    - mariadb-server
+    - mariadb-backup
+    - python3-openssl
+    state: present
+    install_recommends: yes
+
+- name: create mariadb.service.d directory
+  file:
+    path: /etc/systemd/system/mariadb.service.d
+    state: directory
+    mode: '0755'
+
+- name: configure systemd service timeout
+  template:
+    src: timeoutstartsec.conf.j2
+    dest: /etc/systemd/system/mariadb.service.d/timeoutstartsec.conf
+    mode: '0644'
+
+- name: systemd daemon reload
+  systemd:
+    daemon_reload: yes
+
+- name: start mysql
+  service:
+    name: mysql
+    state: started
+    enabled: yes
+
+- name: run db queries
+  mysql_query:
+    login_user: root
+    query:
+      - drop user if exists 'mysql'@'localhost'; # useful for testing if modifying this playbook
+      - create user 'mysql'@'localhost' identified via unix_socket;
+      - grant reload, lock tables, process, replication client on *.* to 'mysql'@'localhost';
+      - flush privileges;
+    single_transaction: yes

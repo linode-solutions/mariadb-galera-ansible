@@ -1,0 +1,26 @@
+# roles/db/tasks/firewall.yml
+
+- name: install firewalld
+  apt:
+    name: firewalld
+    state: present
+
+- name: update firewalld.conf
+  lineinfile:
+    path: /etc/firewalld/firewalld.conf
+    regexp: '^IndividualCalls=no'
+    line: IndividualCalls=yes
+    mode: '0640'
+
+- name: configure firewalld galera service
+  template:
+    src: firewalld-services-galera.j2
+    dest: /etc/firewalld/services/galera.xml
+    mode: '0640'
+
+- name: configure firewalld internal zone
+  template:
+    src: firewalld-zones-internal.j2
+    dest: /etc/firewalld/zones/internal.xml
+    mode: '0640'
+  notify: firewalld enable
