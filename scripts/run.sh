@@ -12,8 +12,8 @@ function cleanup {
 }
 
 # global constants
-readonly SSH_PUB_KEY=$(ssh-keygen -o -a 100 -t ed25519 -C "ansible" -f "${HOME}/.ssh/id_ansible_ed25519" -q -N "" <<<y >/dev/null && cat ${HOME}/.ssh/id_ansible_ed25519.pub)
-readonly SSH_PRIV_KEY=$(cat ${HOME}/.ssh/id_ansible_ed25519)
+#readonly SSH_PUB_KEY=$(ssh-keygen -o -a 100 -t ed25519 -C "ansible" -f "${HOME}/.ssh/id_ansible_ed25519" -q -N "" <<<y >/dev/null && cat ${HOME}/.ssh/id_ansible_ed25519.pub)
+#readonly SSH_PRIV_KEY=$(cat ${HOME}/.ssh/id_ansible_ed25519)
 readonly SSH_KEY_PATH="${HOME}/.ssh/id_ansible_ed25519"
 readonly ROOT_PASS=$(openssl rand -base64 32)
 readonly VAULT_PASS=$(openssl rand -base64 32)

@@ -21,6 +21,10 @@ jobs:
         with:
           python-version: 3.9
 
+      - uses: webfactory/ssh-agent@v0.5.3
+              with:
+                  ssh-private-key: ${{ secrets.SSH_PRIV_KEY }}
+
       - name: copy run script to path
         run: |
           mkdir -p $HOME/.local/bin
