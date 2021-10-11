@@ -39,6 +39,7 @@ function build {
     eval $(ssh-agent)
     ssh-add ${SSH_KEY_PATH}
     echo "private_key_file = ${SSH_KEY_PATH}" >> ansible.cfg
+    echo "ansible_password = ${ROOT_PASS}" >> ansible.cfg
 }
 
 function lint {
