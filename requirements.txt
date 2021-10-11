@@ -1,6 +1,6 @@
 wheel==0.37.0
-linode_api4==
-ansible==
+linode_api4
+ansible
 polling==0.3.2
 pymysql==1.0.2
 docker==5.0.0
