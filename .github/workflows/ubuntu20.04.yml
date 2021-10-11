@@ -27,7 +27,6 @@ jobs:
       - name: integrity checks
         run: |
           echo "53f93fb473e306bdb40b503229c40464cf60e0e2188d58875a8532e50c7c77b0 group_vars/galera/vars" | sha256sum -c
-          echo "4f1d28570d83ead74d780ae44f850b7bc7e417759f85870757e98489edfb73d1 scripts/run.sh" | sha256sum -c
 
       - name: install dependencies
         run: |
