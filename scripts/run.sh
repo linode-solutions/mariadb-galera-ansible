@@ -5,7 +5,7 @@ trap "cleanup $? $LINENO" EXIT
 function cleanup {
   if [ "$?" != "0" ]; then
     echo "Error! Destroying nodes."
-    destroy
+    #destroy
     echo "PIPELINE FAILED."
     exit 1
   fi
