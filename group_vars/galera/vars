@@ -1,11 +1,11 @@
 # linode vars
-ssh_keys: 
-galera_prefix: 
-cluster_name: 
+ssh_keys:
+galera_prefix:
+cluster_name:
 type:
-region: 
+region:
 image:
-group: 
+group:
 linode_tags:
 
 # ssl/tls vars

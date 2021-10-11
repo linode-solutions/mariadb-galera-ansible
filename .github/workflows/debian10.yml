@@ -1,0 +1,50 @@
+---
+name: Debian 10
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: set up python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: copy run script to path
+        run: |
+          mkdir -p $HOME/.local/bin
+          cp scripts/run.sh $HOME/.local/bin/run
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: integrity checks
+        run: |
+          echo "53f93fb473e306bdb40b503229c40464cf60e0e2188d58875a8532e50c7c77b0 group_vars/galera/vars" | sha256sum -c
+          echo "94c1de5f1e95d081f850e7f4423c98a055ff6da219e9ebad9f724d01f478e87d scripts/run.sh" | sha256sum -c
+          
+      - name: install dependencies
+        run: |
+          sudo apt update
+          sudo apt install openssh-server -y
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r requirements.txt
+          ansible-galaxy collection install linode.cloud community.crypto community.mysql
+
+      - name: build ansible environment
+        run: run build
+        env:
+          TOKEN: ${{ secrets.LINODE_API_TOKEN }}
+          VARS_URL: ${{ secrets.TEST_VARS_URL }}
+
+      - name: test debian 10
+        run: run test:debian10
