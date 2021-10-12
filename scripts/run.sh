@@ -40,6 +40,8 @@ function build {
     ssh-add ${SSH_KEY_PATH}
     echo "private_key_file = ${SSH_KEY_PATH}" >> ansible.cfg
     echo "ansible_password = ${ROOT_PASS}" >> ansible.cfg
+    cat ansible.cfg
+
 }
 
 function lint {
@@ -56,6 +58,7 @@ function verify {
 function test:ubuntu2004 {
     DISTRO="ubuntu"
     ansible-playbook provision.yml --extra-vars "ssh_keys=\"${SSH_PUB_KEY}\" galera_prefix=ubuntu_${DATETIME} image=${UBUNTU_IMAGE}"
+    sleep 10
 	ansible-playbook -i hosts site.yml
     verify ${DISTRO}
 	
@@ -64,6 +67,7 @@ function test:ubuntu2004 {
 function test:debian10 {
     DISTRO="debian"
     ansible-playbook provision.yml --extra-vars "ssh_keys=\"${SSH_PUB_KEY}\" galera_prefix=debian_${DATETIME} image=${DEBIAN_IMAGE}"
+    sleep 10
 	ansible-playbook -i hosts site.yml
     verify ${DISTRO}
 }
