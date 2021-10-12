@@ -38,10 +38,7 @@ function build {
     chmod 600 ${SSH_KEY_PATH}
     eval $(ssh-agent)
     ssh-add ${SSH_KEY_PATH}
-    echo "private_key_file = ${SSH_KEY_PATH}" >> ansible.cfg
-    echo "ansible_password = ${ROOT_PASS}" >> ansible.cfg
-    cat ansible.cfg
-
+    echo -e "\nprivate_key_file = ${SSH_KEY_PATH}" >> ansible.cfg
 }
 
 function lint {
@@ -61,7 +58,6 @@ function test:ubuntu2004 {
     sleep 10
 	ansible-playbook -i hosts site.yml
     verify ${DISTRO}
-	
 }
 
 function test:debian10 {
