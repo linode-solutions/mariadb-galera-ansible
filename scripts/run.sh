@@ -54,7 +54,7 @@ function verify {
 
 function test:ubuntu2004 {
     DISTRO="ubuntu"
-    ansible-playbook provision.yml --extra-vars "ssh_keys=\"${SSH_PUB_KEY}\" galera_prefix=ubuntu_${DATETIME} image=${UBUNTU_IMAGE}" --flush-cache
+    ansible-playbook provision.yml --extra-vars "ssh_keys=\"${SSH_PUB_KEY}\" galera_prefix=ubuntu_${DATETIME} image=${UBUNTU_IMAGE}"
     sleep 10
 	ansible-playbook -i hosts site.yml
     verify ${DISTRO}
@@ -62,7 +62,7 @@ function test:ubuntu2004 {
 
 function test:debian10 {
     DISTRO="debian"
-    ansible-playbook provision.yml --extra-vars "ssh_keys=\"${SSH_PUB_KEY}\" galera_prefix=debian_${DATETIME} image=${DEBIAN_IMAGE}" --flush-cache
+    ansible-playbook provision.yml --extra-vars "ssh_keys=\"${SSH_PUB_KEY}\" galera_prefix=debian_${DATETIME} image=${DEBIAN_IMAGE}"
     sleep 10
 	ansible-playbook -i hosts site.yml
     verify ${DISTRO}
