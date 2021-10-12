@@ -73,10 +73,10 @@ workflows:
     jobs:
       - ubuntu2004:
           context:
-            - LINODE_API_TOKEN
+            - MY_API_TOKEN
             - TEST_VARS_URL
       - debian10:
           context:
-            - LINODE_API_TOKEN
+            - MY_API_TOKEN
             - TEST_VARS_URL
       - lint
