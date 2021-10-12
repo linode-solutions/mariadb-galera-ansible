@@ -43,10 +43,9 @@ jobs:
           ansible-galaxy collection install linode.cloud community.crypto community.mysql
 
       - name: build ansible environment
-        run: run build
+        run: | 
+          run build
+          run test:debian10
         env:
           TOKEN: ${{ secrets.LINODE_API_TOKEN }}
           VARS_URL: ${{ secrets.TEST_VARS_URL }}
-
-      - name: test ubuntu 20.04
-        run: run test:ubuntu2004

@@ -15,9 +15,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      - uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIV_KEY }}
 
       - name: set up python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
@@ -43,10 +40,9 @@ jobs:
           ansible-galaxy collection install linode.cloud community.crypto community.mysql
 
       - name: build ansible environment
-        run: run build
+        run: | 
+          run build
+          run test:debian10
         env:
           TOKEN: ${{ secrets.LINODE_API_TOKEN }}
           VARS_URL: ${{ secrets.TEST_VARS_URL }}
-
-      - name: test debian 10
-        run: run test:debian10
