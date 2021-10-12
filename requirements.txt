@@ -1,9 +1,11 @@
-linode_api4==5.2.1
-ansible==4.3.0
+wheel==0.37.0
+linode_api4
+ansible
 polling==0.3.2
 pymysql==1.0.2
+docker==5.0.0
 molecule==3.4.0
-molecule-vagrant==0.6.1
-python-vagrant==0.5.15
+molecule-docker<1.0.0
+python-docker==0.1.0
 yamllint==1.26.2
 flake8==3.9.2

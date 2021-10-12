@@ -1,0 +1,9 @@
+---
+skip_list:
+  - command-instead-of-shell
+  - no-changed-when
+  - no-jinja-when
+exclude_paths:
+  - .cache/
+  - .github/
+  - tests/

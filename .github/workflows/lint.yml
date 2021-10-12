@@ -1,0 +1,37 @@
+---
+name: Linter
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: set up python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: copy run script to path
+        run: |
+          mkdir -p $HOME/.local/bin
+          cp scripts/run.sh $HOME/.local/bin/run
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r requirements.txt
+          ansible-galaxy collection install linode.cloud community.crypto community.mysql
+
+      - name: run linters
+        run: run lint 
