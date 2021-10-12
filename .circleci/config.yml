@@ -1,0 +1,82 @@
+version: 2.1
+
+commands:
+  machine_deps:
+    description: "install machine dependencies" #test
+    steps:
+      - run: |
+          sudo apt update
+          sudo apt install python3-distutils python3-apt python3.9 python3-pip -y
+          python3.9 -m pip install --upgrade pip
+          python3.9 -m pip install -r requirements.txt
+          ansible-galaxy collection install linode.cloud community.crypto community.mysql
+
+  docker_deps:
+    description: "install docker dependencies"
+    steps:
+      - run: |
+          apt update
+          apt install python3-distutils python3-apt python3.9 python3-pip -y
+          python3.9 -m pip install --upgrade pip
+          python3.9 -m pip install -r requirements.txt
+          ansible-galaxy collection install linode.cloud community.crypto community.mysql
+
+  run_script:
+    description: "copy run script to path"
+    steps:
+      - run: |
+          mkdir -p $HOME/.local/bin
+          cp scripts/run.sh $HOME/.local/bin/run
+          echo "export PATH=$HOME/.local/bin:$PATH" >> $BASH_ENV
+
+  build:
+    description: "build"
+    steps:
+      - run: |
+          export TOKEN=$TOKEN
+          export VARS_URL=$VARS_URL
+          run build
+
+
+jobs:
+  ubuntu2004:
+    machine:
+      image: ubuntu-2004:202010-01
+    steps:
+      - checkout
+      - run_script
+      - machine_deps
+      - build
+      - run: run test:ubuntu2004
+
+  debian10:
+    machine:
+      image: ubuntu-2004:202010-01
+    steps:
+      - checkout
+      - run_script
+      - machine_deps
+      - build
+      - run: run test:debian10
+
+  lint:
+    docker:
+      - image: jrei/systemd-ubuntu:latest
+    steps:
+      - checkout
+      - run_script
+      - docker_deps
+      - run: run lint
+      
+workflows:
+  build_test_lint:
+    jobs:
+      - ubuntu2004:
+          context:
+            - LINODE_API_TOKEN
+            - TEST_VARS_URL
+      - debian10:
+          context:
+            - LINODE_API_TOKEN
+            - TEST_VARS_URL
+      - lint
