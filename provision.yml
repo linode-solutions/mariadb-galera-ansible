@@ -98,5 +98,3 @@
       - '{{ galera_ip1 }}'
       - '{{ galera_ip2 }}'
       - '{{ galera_ip3 }}'
-
-  
