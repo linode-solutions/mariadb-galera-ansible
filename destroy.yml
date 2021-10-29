@@ -1,4 +1,4 @@
-#destroy galera linodes
+# destroy galera linodes
 
 - name: destroy galera linodes
   hosts: localhost
