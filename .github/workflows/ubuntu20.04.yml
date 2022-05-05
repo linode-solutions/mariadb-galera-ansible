@@ -1,9 +1,6 @@
 ---
 name: Ubuntu 20.04
-on:
-  pull_request:
-    branches:
-      - main
+on: [push, pull_request]
       
 jobs:
   build:
